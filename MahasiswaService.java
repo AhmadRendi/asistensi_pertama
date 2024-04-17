@@ -1,27 +1,22 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.InputMismatchException;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class MahasiswaService{
     
 
     private List<Mahasiswa> mahasiswa = new ArrayList<>();
      
-    // private Integer number = 1;
-
     private String numberFirst = "0000";
 
-    private boolean validateName(String name){
-        boolean checkNumber = Pattern.matches(".*\\d.*", name);
-        boolean cehckSymbol = Pattern.compile("[\\p{Punct}]").matcher(name).find();
-        if(!checkNumber && !cehckSymbol){
-            return true;
-        }
-        throw new InputMismatchException("Name Is Not Valid!");
-    }
+    // private boolean validateName(String name){
+    //     boolean checkNumber = Pattern.matches(".*\\d.*", name);
+    //     boolean cehckSymbol = Pattern.compile("[\\p{Punct}]").matcher(name).find();
+    //     if(!checkNumber && !cehckSymbol){
+    //         return true;
+    //     }
+    //     throw new InputMismatchException("Name Is Not Valid!");
+    // }
 
 
     public void mendaftar(Mahasiswa mhs){
@@ -32,12 +27,10 @@ public class MahasiswaService{
         if(listSesusaiJurusanPendaftar(mhs.getJurusan()).isEmpty()){
             int number = 0;
             String nimMhsTemp = mhs.getJurusan().getNim().toString() + year.toString()  + numberFirst;
-            System.out.println(nimMhsTemp);
             Long n = Long.valueOf(nimMhsTemp);
             Long nimMhs = n + number++;
             mhs.setNim(String.valueOf(nimMhs));
         }else {
-            System.out.println("Hello");
             int n = listSesusaiJurusanPendaftar(mhs.getJurusan()).size();
             String nimMahasiswaLast = 
                 listSesusaiJurusanPendaftar(mhs.getJurusan()).get(n - 1).getNim();
@@ -92,6 +85,25 @@ public class MahasiswaService{
         return list;
     }
 
+    public void validationTerdaftar(Mahasiswa mahasiswa){
+        for (int i = 0; i < mahasiswaMendaftar().size(); i++){
+            if(mahasiswaMendaftar().get(i).equals(mahasiswa.getNim())){
+                mahasiswaMendaftar().get(i).setStatusAktif(mahasiswa.isStatusAktif());
+                mahasiswaMendaftar().get(i).setStatusDiTerima(mahasiswa.isStatusDiTerima());
+                mahasiswaMendaftar().get(i).setStatusMendaftar(mahasiswa.isStatusMendaftar());
+            }
+        }
+    }
+
+    public void validationLulus(String nim){
+        for (int i = 0; i < mahasiswaTerdaftar().size(); i++){
+            if(mahasiswaTerdaftar().get(i).getNim().equals(nim)){
+                mahasiswaTerdaftar().get(i).setStatusLulus(true);
+            }
+        }
+    }
+
+    
 
      
     
